@@ -13,7 +13,7 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
         val differences = compare(File(testResources.path))
 
         assertThat(differences).containsExactlyElementsOf(
-            listOf(ExtraFile("extraDir${File.separator}dummy.txt"), ExtraDirectory("extraDir"))
+            listOf(ExtraFile("extraDir${File.separator}dummy1.txt"), ExtraDirectory("extraDir"))
         )
     }
 
