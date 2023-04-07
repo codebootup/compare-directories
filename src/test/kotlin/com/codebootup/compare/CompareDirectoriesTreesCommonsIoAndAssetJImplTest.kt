@@ -8,12 +8,12 @@ import kotlin.io.path.Path
 class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
 
     @Test
-    fun `can detect extra directory`(){
+    fun `can detect extra file and directory`(){
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("extraDirectoryTest")
         val differences = compare(File(testResources.path))
 
         assertThat(differences).containsExactlyElementsOf(
-            listOf(ExtraDirectory("extraDir"))
+            listOf(ExtraFile("extraDir${File.separator}dummy.txt"), ExtraDirectory("extraDir"))
         )
     }
 
