@@ -19,7 +19,9 @@ package com.codebootup.compare
 
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
+import org.assertj.core.internal.Diff
 import java.io.File
+import java.nio.charset.Charset
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.streams.toList
@@ -27,12 +29,57 @@ import kotlin.streams.toList
 class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
 
     override fun compare(original: Path, revised: Path): List<Difference> {
-        return getDirectoryAndFileTreeDifferences(original = original, revised = revised)
+        return  getDirectoryAndFileTreeDifferences(original = original, revised = revised) +
+                getContentDifferences(original = original, revised = revised)
+    }
+
+    private fun getContentDifferences(original: Path, revised: Path): List<Difference>{
+        val originalFiles = files(original)
+        val revisedFiles = files(revised)
+
+        val oFiles = originalFiles
+            .filter { it.isFile }
+            .associateBy { it.absolutePath.substring(original.absolutePathString().length + 1) }
+
+        val rFiles = revisedFiles
+            .filter { it.isFile }
+            .associateBy { it.absolutePath.substring(revised.absolutePathString().length + 1) }
+
+        val filesToCompare = oFiles
+            .keys
+            .filter { oFiles[it] != null && rFiles[it] != null }
+
+        return filesToCompare
+            .map {
+                val diff = Diff().diff(
+                    rFiles[it],
+                    Charset.defaultCharset(),
+                    oFiles[it],
+                    Charset.defaultCharset()
+                )
+                val deltas = diff.map { d ->
+                    ContentDelta(
+                        original = ContentChunk(
+                            position = d.original.position,
+                            lines = d.original.lines.filter { l -> l.isNotBlank() }.map {l -> ContentLine(l)}
+                        ),
+                        revised = ContentChunk(
+                            position = d.revised.position,
+                            lines = d.revised.lines.filter { l -> l.isNotBlank() }.map {l -> ContentLine(l)}
+                        ),
+                        type = ContentDelta.ContentDeltaType.valueOf(d.type.toString()))
+                }
+                ContentDifference(
+                    file = it,
+                    deltas = deltas
+                )
+            }
+            .filter { it.deltas.isNotEmpty() }
     }
 
     private fun getDirectoryAndFileTreeDifferences(original: Path, revised: Path) : List<Difference>{
-        val originalFiles = listFiles(original)
-        val revisedFiles = listFiles(revised)
+        val originalFiles = sortedRelativeFiles(original)
+        val revisedFiles = sortedRelativeFiles(revised)
 
         val missing = originalFiles
             .filter { !revisedFiles.contains(it) }
@@ -59,18 +106,27 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
         return missingFiles + missingDirectories + extraFiles + extraDirectories
     }
 
-    private fun listFiles(dirPath: Path): List<String> {
+    private fun sortedRelativeFiles(dirPath: Path): List<String> {
         val dir = File(dirPath.absolutePathString())
         return FileUtils.listFilesAndDirs(
             dir,
             TrueFileFilter.TRUE,
             TrueFileFilter.TRUE
         )
-            .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
-            .filter { it.isNotBlank() }
-            .stream()
-            .sorted()
-            .toList()
+        .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
+        .filter { it.isNotBlank() }
+        .stream()
+        .sorted()
+        .toList()
+    }
+
+    private fun files(dirPath: Path): List<File> {
+        val dir = File(dirPath.absolutePathString())
+        return FileUtils.listFilesAndDirs(
+            dir,
+            TrueFileFilter.TRUE,
+            TrueFileFilter.TRUE
+        ).map { it }
     }
 
 }

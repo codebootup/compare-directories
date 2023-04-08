@@ -8,5 +8,5 @@ repositories{
 
 dependencies{
     implementation("commons-io:commons-io:2.11.0")
-    testImplementation("org.assertj:assertj-core:3.24.2")
+    implementation("org.assertj:assertj-core:3.24.2")
 }
