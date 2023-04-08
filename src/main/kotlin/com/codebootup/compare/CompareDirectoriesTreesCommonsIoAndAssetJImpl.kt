@@ -31,30 +31,8 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
     }
 
     private fun getDirectoryAndFileTreeDifferences(original: Path, revised: Path) : List<Difference>{
-        val originalDir = File(original.absolutePathString())
-        val revisedDir = File(revised.absolutePathString())
-
-        val originalFiles = FileUtils.listFilesAndDirs(
-            originalDir,
-            TrueFileFilter.TRUE,
-            TrueFileFilter.TRUE
-        )
-        .map { it.absolutePath.substring(original.absolutePathString().length) }
-        .filter { it.isNotBlank() }
-        .stream()
-        .sorted()
-        .toList()
-
-        val revisedFiles = FileUtils.listFilesAndDirs(
-            revisedDir,
-            TrueFileFilter.TRUE,
-            TrueFileFilter.TRUE
-        )
-        .map { it.absolutePath.substring(revised.absolutePathString().length) }
-        .filter { it.isNotBlank() }
-        .stream()
-        .sorted()
-        .toList()
+        val originalFiles = listFiles(original)
+        val revisedFiles = listFiles(revised)
 
         val missing = originalFiles
             .filter { !revisedFiles.contains(it) }
@@ -67,18 +45,32 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
             .toList()
 
         val missingFiles = missing.filter { it.isFile }
-            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length)) }
+            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length+1)) }
 
         val missingDirectories = missing.filter { it.isDirectory }
-            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length)) }
+            .map { MissingDirectory(it.absolutePath.substring(original.absolutePathString().length+1)) }
 
         val extraFiles = new.filter { it.isFile }
-            .map { ExtraFile(it.absolutePath.substring(original.absolutePathString().length)) }
+            .map { ExtraFile(it.absolutePath.substring(revised.absolutePathString().length+1)) }
 
         val extraDirectories = new.filter { it.isDirectory }
-            .map { ExtraDirectory(it.absolutePath.substring(original.absolutePathString().length)) }
+            .map { ExtraDirectory(it.absolutePath.substring(revised.absolutePathString().length+1)) }
 
         return missingFiles + missingDirectories + extraFiles + extraDirectories
+    }
+
+    private fun listFiles(dirPath: Path): List<String> {
+        val dir = File(dirPath.absolutePathString())
+        return FileUtils.listFilesAndDirs(
+            dir,
+            TrueFileFilter.TRUE,
+            TrueFileFilter.TRUE
+        )
+            .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
+            .filter { it.isNotBlank() }
+            .stream()
+            .sorted()
+            .toList()
     }
 
 }
