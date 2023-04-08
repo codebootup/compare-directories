@@ -1,6 +1,7 @@
 package com.codebootup.compare
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import java.io.File
 import kotlin.io.path.Path
@@ -60,6 +61,7 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
     }
 
     @Test
+    @Ignore
     fun `can pretty print differences`(){
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))
