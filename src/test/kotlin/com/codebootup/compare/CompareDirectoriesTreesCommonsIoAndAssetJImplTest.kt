@@ -65,7 +65,7 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
     fun `can pretty print differences`(){
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))
-        assertThat(DifferenceToString(differences).toString()).isEqualTo("Missing Directories:\n" +
+        assertThat(PrettyPrintDifferences().print(differences)).isEqualTo("Missing Directories:\n" +
                 "\tmissingDir\n" +
                 "\tmissingDir2\n" +
                 "\n" +
@@ -112,9 +112,6 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                 "\t\tline10\n")
     }
 
-    private fun printDifferences(differences: List<Difference>) {
-        println(DifferenceToString(differences).toString())
-    }
     private fun compare(testResources: File): List<Difference> {
         return CompareDirectoriesTreesCommonsIoAndAssetJImpl().compare(
             original = Path("${testResources.absolutePath}${File.separator}dirOriginal"),

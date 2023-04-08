@@ -49,14 +49,14 @@ data class ContentChunk(
 
 data class ContentLine(val line: String)
 
-class DifferenceToString(private val differences: List<Difference>){
+class PrettyPrintDifferences(){
     companion object{
         const val level1 = "\n"
         const val level2 = "\n\t"
         const val level3 = "\n\t\t"
         const val twoBlankLines = "\n\n"
     }
-    override fun toString() : String{
+    fun print(differences: List<Difference>) : String{
         val contentDifferences =
             differences.filterIsInstance<ContentDifference>().joinToString(level1) { toString(it) }
         val missingFiles = differences.filterIsInstance<MissingFile>().joinToString(level2) { it.file }
