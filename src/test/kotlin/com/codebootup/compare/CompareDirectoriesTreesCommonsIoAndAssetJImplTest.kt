@@ -148,4 +148,5 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
             revised = Path("${testResources.absolutePath}${File.separator}dirRevised"),
         )
     }
+
 }
