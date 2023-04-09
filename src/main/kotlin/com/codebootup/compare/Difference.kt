@@ -49,7 +49,7 @@ data class ContentChunk(
 
 data class ContentLine(val line: String)
 
-class PrettyPrintDifferences(){
+class PrettyPrintDifferences{
     companion object{
         const val level1 = "\n"
         const val level2 = "\n\t"

@@ -1,6 +1,24 @@
+/*
+ *  Copyright 2023-2023 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.codebootup.compare
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.Ignore
 import org.junit.Test
 import java.io.File
@@ -62,6 +80,7 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
 
     @Test
     @Ignore
+    //TODO - This test does not work on the github pipeline investigate why and fix
     fun `can pretty print differences`(){
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))
@@ -110,6 +129,17 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                 "\n" +
                 "\tInserted content at line 9:\n" +
                 "\t\tline10\n")
+    }
+
+    @Test
+    fun `can throw assertion error when there are differences`(){
+        val testResources = File(CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("extraDirectoryFileTest").path)
+        val expected = Path("${testResources.absolutePath}${File.separator}dirOriginal")
+        val actual = Path("${testResources.absolutePath}${File.separator}dirRevised")
+
+        assertThatExceptionOfType(AssertionError::class.java).isThrownBy{
+            AssertDirectories.assertThat(actual).isEqualTo(expected)
+        }
     }
 
     private fun compare(testResources: File): List<Difference> {
