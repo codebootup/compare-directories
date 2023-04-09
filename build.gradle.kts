@@ -6,7 +6,7 @@ repositories{
     mavenCentral()
 }
 
-group "com.codebootup"
+group "com.codebootup.compare-directories"
 version = (project.properties["buildVersion"] ?: "1.0.0-SNAPSHOT")
 
 dependencies{
