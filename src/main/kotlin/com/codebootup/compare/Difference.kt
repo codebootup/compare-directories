@@ -30,8 +30,7 @@ data class ExtraFile(val file: String) : Difference
 data class ContentDifference(
     val file: String,
     val deltas: List<ContentDelta>,
-) : Difference {
-}
+) : Difference
 
 data class ContentDelta(
     val original: ContentChunk,
