@@ -74,10 +74,16 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("hpehl")
-                        name.set("Harald Pehl")
-                        organization.set("Red Hat")
-                        organizationUrl.set("https://developers.redhat.com/")
+                        id.set("codebootuplee")
+                        name.set("Cooper, Lee")
+                        organization.set("codebootup")
+                        organizationUrl.set("https://github.com/codebootup")
+                    }
+                    developer {
+                        id.set("codebootuphong")
+                        name.set("Koh, Hong Da")
+                        organization.set("codebootup")
+                        organizationUrl.set("https://github.com/codebootup")
                     }
                 }
                 scm {
