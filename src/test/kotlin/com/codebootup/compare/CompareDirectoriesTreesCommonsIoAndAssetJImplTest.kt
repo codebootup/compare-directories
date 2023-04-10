@@ -138,8 +138,8 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                     "\tmissingDir2\n" +
                     "\n" +
                     "Missing Files:\n" +
-                    "\tmissingDir2/missingFile.txt\n" +
                     "\tmissingDir/missingFile.txt\n" +
+                    "\tmissingDir2/missingFile.txt\n" +
                     "\tmissingFile1\n" +
                     "\tmissingFile2\n" +
                     "\n" +
@@ -148,8 +148,8 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                     "\textraDir2\n" +
                     "\n" +
                     "Extra Files:\n" +
-                    "\textraDir2/extraFile.txt\n" +
                     "\textraDir/extraFile.txt\n" +
+                    "\textraDir2/extraFile.txt\n" +
                     "\n" +
                     "same.txt:\n" +
                     "\tChanged content at line 3:\n" +
