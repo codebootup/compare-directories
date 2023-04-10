@@ -9,7 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -21,3 +23,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            build/test-results/**/*.xml

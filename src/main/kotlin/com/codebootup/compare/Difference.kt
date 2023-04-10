@@ -59,10 +59,10 @@ class PrettyPrintDifferences {
     fun print(differences: List<Difference>): String {
         val contentDifferences =
             differences.filterIsInstance<ContentDifference>().joinToString(level1) { toString(it) }
-        val missingFiles = differences.filterIsInstance<MissingFile>().joinToString(level2) { it.file }
-        val missingDirectories = differences.filterIsInstance<MissingDirectory>().joinToString(level2) { it.directory }
-        val extraFiles = differences.filterIsInstance<ExtraFile>().joinToString(level2) { it.file }
-        val extraDirectories = differences.filterIsInstance<ExtraDirectory>().joinToString(level2) { it.directory }
+        val missingFiles = differences.filterIsInstance<MissingFile>().sortedBy { it.file }.joinToString(level2) { it.file }
+        val missingDirectories = differences.filterIsInstance<MissingDirectory>().sortedBy { it.directory }.joinToString(level2) { it.directory }
+        val extraFiles = differences.filterIsInstance<ExtraFile>().sortedBy { it.file }.joinToString(level2) { it.file }
+        val extraDirectories = differences.filterIsInstance<ExtraDirectory>().sortedBy { it.directory }.joinToString(level2) { it.directory }
 
         val missingDirectoriesString = if (missingDirectories.isNotBlank()) "Missing Directories:$level2$missingDirectories" else ""
         val missingFilesString = if (missingFiles.isNotBlank()) "Missing Files:$level2$missingFiles" else ""
