@@ -19,6 +19,6 @@ package com.codebootup.compare
 
 import java.nio.file.Path
 
-interface CompareDirectories{
-    fun compare(original: Path, revised: Path) : List<Difference>
+interface CompareDirectories {
+    fun compare(original: Path, revised: Path): List<Difference>
 }
