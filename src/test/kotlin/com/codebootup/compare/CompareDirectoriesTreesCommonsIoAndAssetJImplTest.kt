@@ -81,7 +81,6 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
 
     // TODO - This test does not work on the github pipeline investigate why and fix
     @Test
-    @Ignore
     fun `can pretty print differences`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))

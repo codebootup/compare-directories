@@ -28,4 +28,4 @@ jobs:
         if: always()
         with:
           files: |
-            test-results/**/*.xml
+            build/test-results/**/*.xml
