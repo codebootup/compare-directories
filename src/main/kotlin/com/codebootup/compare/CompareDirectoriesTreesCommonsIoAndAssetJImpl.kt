@@ -29,11 +29,11 @@ import kotlin.streams.toList
 class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
 
     override fun compare(original: Path, revised: Path): List<Difference> {
-        return  getDirectoryAndFileTreeDifferences(original = original, revised = revised) +
-                getContentDifferences(original = original, revised = revised)
+        return getDirectoryAndFileTreeDifferences(original = original, revised = revised) +
+            getContentDifferences(original = original, revised = revised)
     }
 
-    private fun getContentDifferences(original: Path, revised: Path): List<Difference>{
+    private fun getContentDifferences(original: Path, revised: Path): List<Difference> {
         val originalFiles = files(original)
         val revisedFiles = files(revised)
 
@@ -55,29 +55,30 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
                     rFiles[it],
                     Charset.defaultCharset(),
                     oFiles[it],
-                    Charset.defaultCharset()
+                    Charset.defaultCharset(),
                 )
                 val deltas = diff.map { d ->
                     ContentDelta(
                         original = ContentChunk(
                             position = d.original.position,
-                            lines = d.original.lines.filter { l -> l.isNotBlank() }.map {l -> ContentLine(l)}
+                            lines = d.original.lines.filter { l -> l.isNotBlank() }.map { l -> ContentLine(l) },
                         ),
                         revised = ContentChunk(
                             position = d.revised.position,
-                            lines = d.revised.lines.filter { l -> l.isNotBlank() }.map {l -> ContentLine(l)}
+                            lines = d.revised.lines.filter { l -> l.isNotBlank() }.map { l -> ContentLine(l) },
                         ),
-                        type = ContentDelta.ContentDeltaType.valueOf(d.type.toString()))
+                        type = ContentDelta.ContentDeltaType.valueOf(d.type.toString()),
+                    )
                 }
                 ContentDifference(
                     file = it,
-                    deltas = deltas
+                    deltas = deltas,
                 )
             }
             .filter { it.deltas.isNotEmpty() }
     }
 
-    private fun getDirectoryAndFileTreeDifferences(original: Path, revised: Path) : List<Difference>{
+    private fun getDirectoryAndFileTreeDifferences(original: Path, revised: Path): List<Difference> {
         val originalFiles = sortedRelativeFiles(original)
         val revisedFiles = sortedRelativeFiles(revised)
 
@@ -92,16 +93,16 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
             .toList()
 
         val missingFiles = missing.filter { it.isFile }
-            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length+1)) }
+            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length + 1)) }
 
         val missingDirectories = missing.filter { it.isDirectory }
-            .map { MissingDirectory(it.absolutePath.substring(original.absolutePathString().length+1)) }
+            .map { MissingDirectory(it.absolutePath.substring(original.absolutePathString().length + 1)) }
 
         val extraFiles = new.filter { it.isFile }
-            .map { ExtraFile(it.absolutePath.substring(revised.absolutePathString().length+1)) }
+            .map { ExtraFile(it.absolutePath.substring(revised.absolutePathString().length + 1)) }
 
         val extraDirectories = new.filter { it.isDirectory }
-            .map { ExtraDirectory(it.absolutePath.substring(revised.absolutePathString().length+1)) }
+            .map { ExtraDirectory(it.absolutePath.substring(revised.absolutePathString().length + 1)) }
 
         return missingFiles + missingDirectories + extraFiles + extraDirectories
     }
@@ -111,13 +112,13 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
         return FileUtils.listFilesAndDirs(
             dir,
             TrueFileFilter.TRUE,
-            TrueFileFilter.TRUE
+            TrueFileFilter.TRUE,
         )
-        .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
-        .filter { it.isNotBlank() }
-        .stream()
-        .sorted()
-        .toList()
+            .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
+            .filter { it.isNotBlank() }
+            .stream()
+            .sorted()
+            .toList()
     }
 
     private fun files(dirPath: Path): List<File> {
@@ -125,8 +126,7 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
         return FileUtils.listFilesAndDirs(
             dir,
             TrueFileFilter.TRUE,
-            TrueFileFilter.TRUE
+            TrueFileFilter.TRUE,
         ).map { it }
     }
-
 }

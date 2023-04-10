@@ -27,29 +27,30 @@ import kotlin.io.path.Path
 class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
 
     @Test
-    fun `CompareDirectoriesTreesCommonsIoAndAssetJImplTest is subclass of CompareDirectories`(){
+    fun `CompareDirectoriesTreesCommonsIoAndAssetJImplTest is subclass of CompareDirectories`() {
         assertThat(CompareDirectoriesTreesCommonsIoAndAssetJImpl()).isInstanceOf(CompareDirectories::class.java)
     }
+
     @Test
-    fun `can detect extra file and directory`(){
+    fun `can detect extra file and directory`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("extraDirectoryFileTest")
         val differences = compare(File(testResources.path))
         assertThat(differences).containsExactlyElementsOf(
-            listOf(ExtraFile("extraDir${File.separator}extraFile.txt"), ExtraDirectory("extraDir"))
+            listOf(ExtraFile("extraDir${File.separator}extraFile.txt"), ExtraDirectory("extraDir")),
         )
     }
 
     @Test
-    fun `can detect missing file and directory`(){
+    fun `can detect missing file and directory`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("missingDirectoryFileTest")
         val differences = compare(File(testResources.path))
         assertThat(differences).containsExactlyElementsOf(
-            listOf(MissingFile("missingDir${File.separator}missingFile.txt"), MissingDirectory("missingDir"))
+            listOf(MissingFile("missingDir${File.separator}missingFile.txt"), MissingDirectory("missingDir")),
         )
     }
 
     @Test
-    fun `can detect content change`(){
+    fun `can detect content change`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("contentDifferenceFileTest")
         val differences = compare(File(testResources.path))
         assertThat(differences).containsExactlyElementsOf(
@@ -58,33 +59,34 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                     file = "same.txt",
                     deltas = listOf(
                         ContentDelta(
-                            original = ContentChunk(position = 2, lines = listOf(ContentLine("line3"),ContentLine("line4"))),
+                            original = ContentChunk(position = 2, lines = listOf(ContentLine("line3"), ContentLine("line4"))),
                             revised = ContentChunk(position = 2, lines = listOf(ContentLine("line25"))),
-                            type = ContentDelta.ContentDeltaType.CHANGE
+                            type = ContentDelta.ContentDeltaType.CHANGE,
                         ),
                         ContentDelta(
                             original = ContentChunk(position = 6, lines = listOf(ContentLine("missing"))),
                             revised = ContentChunk(position = 5, lines = listOf()),
-                            type = ContentDelta.ContentDeltaType.DELETE
+                            type = ContentDelta.ContentDeltaType.DELETE,
                         ),
                         ContentDelta(
                             original = ContentChunk(position = 10, lines = listOf()),
                             revised = ContentChunk(position = 8, lines = listOf(ContentLine("line10"))),
-                            type = ContentDelta.ContentDeltaType.INSERT
-                        )
-                    )
-                )
-            )
+                            type = ContentDelta.ContentDeltaType.INSERT,
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 
+    // TODO - This test does not work on the github pipeline investigate why and fix
     @Test
     @Ignore
-    //TODO - This test does not work on the github pipeline investigate why and fix
-    fun `can pretty print differences`(){
+    fun `can pretty print differences`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))
-        assertThat(PrettyPrintDifferences().print(differences)).isEqualTo("Missing Directories:\n" +
+        assertThat(PrettyPrintDifferences().print(differences)).isEqualTo(
+            "Missing Directories:\n" +
                 "\tmissingDir\n" +
                 "\tmissingDir2\n" +
                 "\n" +
@@ -128,16 +130,17 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
                 "\t\tmissing\n" +
                 "\n" +
                 "\tInserted content at line 9:\n" +
-                "\t\tline10\n")
+                "\t\tline10\n",
+        )
     }
 
     @Test
-    fun `can throw assertion error when there are differences`(){
+    fun `can throw assertion error when there are differences`() {
         val testResources = File(CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("extraDirectoryFileTest").path)
         val expected = Path("${testResources.absolutePath}${File.separator}dirOriginal")
         val actual = Path("${testResources.absolutePath}${File.separator}dirRevised")
 
-        assertThatExceptionOfType(AssertionError::class.java).isThrownBy{
+        assertThatExceptionOfType(AssertionError::class.java).isThrownBy {
             AssertDirectories.assertThat(actual).isEqualTo(expected)
         }
     }
@@ -148,5 +151,4 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
             revised = Path("${testResources.absolutePath}${File.separator}dirRevised"),
         )
     }
-
 }

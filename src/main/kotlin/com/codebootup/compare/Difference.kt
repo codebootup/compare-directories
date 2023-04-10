@@ -29,34 +29,35 @@ data class ExtraFile(val file: String) : Difference
 
 data class ContentDifference(
     val file: String,
-    val deltas: List<ContentDelta>) : Difference{
+    val deltas: List<ContentDelta>,
+) : Difference {
 }
 
 data class ContentDelta(
-    val original : ContentChunk,
-    val revised : ContentChunk,
-    val type: ContentDeltaType
-){
-    enum class ContentDeltaType{
+    val original: ContentChunk,
+    val revised: ContentChunk,
+    val type: ContentDeltaType,
+) {
+    enum class ContentDeltaType {
         CHANGE, INSERT, DELETE
     }
 }
 
 data class ContentChunk(
-    val position : Int,
-    val lines: List<ContentLine>
+    val position: Int,
+    val lines: List<ContentLine>,
 )
 
 data class ContentLine(val line: String)
 
-class PrettyPrintDifferences{
-    companion object{
+class PrettyPrintDifferences {
+    companion object {
         const val level1 = "\n"
         const val level2 = "\n\t"
         const val level3 = "\n\t\t"
         const val twoBlankLines = "\n\n"
     }
-    fun print(differences: List<Difference>) : String{
+    fun print(differences: List<Difference>): String {
         val contentDifferences =
             differences.filterIsInstance<ContentDifference>().joinToString(level1) { toString(it) }
         val missingFiles = differences.filterIsInstance<MissingFile>().joinToString(level2) { it.file }
@@ -64,28 +65,31 @@ class PrettyPrintDifferences{
         val extraFiles = differences.filterIsInstance<ExtraFile>().joinToString(level2) { it.file }
         val extraDirectories = differences.filterIsInstance<ExtraDirectory>().joinToString(level2) { it.directory }
 
-        val missingDirectoriesString = if(missingDirectories.isNotBlank()) "Missing Directories:$level2$missingDirectories" else ""
-        val missingFilesString = if(missingFiles.isNotBlank()) "Missing Files:$level2$missingFiles" else ""
-        val extraDirectoriesString = if(extraDirectories.isNotBlank()) "Extra Directories:$level2$extraDirectories" else ""
-        val extraFilesString = if(extraFiles.isNotBlank()) "Extra Files:$level2$extraFiles" else ""
+        val missingDirectoriesString = if (missingDirectories.isNotBlank()) "Missing Directories:$level2$missingDirectories" else ""
+        val missingFilesString = if (missingFiles.isNotBlank()) "Missing Files:$level2$missingFiles" else ""
+        val extraDirectoriesString = if (extraDirectories.isNotBlank()) "Extra Directories:$level2$extraDirectories" else ""
+        val extraFilesString = if (extraFiles.isNotBlank()) "Extra Files:$level2$extraFiles" else ""
 
         return missingDirectoriesString + twoBlankLines + missingFilesString + twoBlankLines + extraDirectoriesString + twoBlankLines + extraFilesString + twoBlankLines + contentDifferences
     }
 
-    private fun toString(contentDifference: ContentDifference) : String{
+    private fun toString(contentDifference: ContentDifference): String {
         val deltas = contentDifference.deltas.map {
-            val originalLines = it.original.lines.joinToString(separator = level3){ l -> l.line }
+            val originalLines = it.original.lines.joinToString(separator = level3) { l -> l.line }
             val revisedLines = it.revised.lines.joinToString(separator = level3) { l -> l.line }
 
-            when(it.type){
-                ContentDelta.ContentDeltaType.CHANGE -> "${level2}Changed content at line ${it.original.position+1}:" +
+            when (it.type) {
+                ContentDelta.ContentDeltaType.CHANGE ->
+                    "${level2}Changed content at line ${it.original.position + 1}:" +
                         "${level3}from ->" +
                         "${level3}$originalLines" +
                         "${level3}to ->" +
                         "${level3}$revisedLines\n"
-                ContentDelta.ContentDeltaType.DELETE -> "${level2}Missing content at line ${it.original.position+1}:" +
+                ContentDelta.ContentDeltaType.DELETE ->
+                    "${level2}Missing content at line ${it.original.position + 1}:" +
                         "${level3}$originalLines\n"
-                ContentDelta.ContentDeltaType.INSERT -> "${level2}Inserted content at line ${it.revised.position+1}:" +
+                ContentDelta.ContentDeltaType.INSERT ->
+                    "${level2}Inserted content at line ${it.revised.position + 1}:" +
                         "${level3}$revisedLines\n"
             }
         }
