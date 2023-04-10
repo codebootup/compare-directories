@@ -1,19 +1,22 @@
-plugins{
+import com.diffplug.gradle.spotless.SpotlessExtension
+
+plugins {
     id("com.codebootup.kotlin") version "1.0.0"
     id("org.jetbrains.dokka") version "1.8.10"
     signing
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
+    id("com.diffplug.spotless") version "6.18.0"
 }
 
-repositories{
+repositories {
     mavenCentral()
 }
 
 group = "com.codebootup.compare-directories"
 version = (project.properties["version"] ?: "1.0.0-SNAPSHOT")
 
-dependencies{
+dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.assertj:assertj-core:3.24.2")
 }
@@ -79,13 +82,13 @@ publishing {
                 }
                 scm {
                     url.set(
-                        "https://github.com/${Meta.githubRepo}.git"
+                        "https://github.com/${Meta.githubRepo}.git",
                     )
                     connection.set(
-                        "scm:git:git://github.com/${Meta.githubRepo}.git"
+                        "scm:git:git://github.com/${Meta.githubRepo}.git",
                     )
                     developerConnection.set(
-                        "scm:git:git://github.com/${Meta.githubRepo}.git"
+                        "scm:git:git://github.com/${Meta.githubRepo}.git",
                     )
                 }
                 issueManagement {
@@ -110,5 +113,14 @@ nexusPublishing {
                 password.set(ossrhPassword.get())
             }
         }
+    }
+}
+
+configure<SpotlessExtension> {
+    kotlin {
+        ktlint()
+    }
+    kotlinGradle {
+        ktlint()
     }
 }

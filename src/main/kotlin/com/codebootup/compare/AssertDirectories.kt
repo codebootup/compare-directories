@@ -20,17 +20,18 @@ package com.codebootup.compare
 import java.nio.file.Path
 
 class AssertDirectories(private val actual: Path) {
-    companion object{
-        fun assertThat(actual: Path) : AssertDirectories{
+    companion object {
+        fun assertThat(actual: Path): AssertDirectories {
             return AssertDirectories(actual)
         }
     }
 
-    fun isEqualTo(expected: Path){
+    fun isEqualTo(expected: Path) {
         val differences = CompareDirectoriesTreesCommonsIoAndAssetJImpl().compare(
-            original = expected, revised = actual
+            original = expected,
+            revised = actual,
         )
-        if(differences.isNotEmpty()){
+        if (differences.isNotEmpty()) {
             throw AssertionError(PrettyPrintDifferences().print(differences))
         }
     }
