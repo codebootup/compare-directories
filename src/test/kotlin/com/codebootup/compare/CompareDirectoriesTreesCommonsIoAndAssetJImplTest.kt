@@ -83,102 +83,101 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
     fun `can pretty print differences`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("lotsOfDifferencesTest")
         val differences = compare(File(testResources.path))
-        if(System.getProperty("os.name").startsWith("Windows")) {
+        if (System.getProperty("os.name").startsWith("Windows")) {
             assertThat(PrettyPrintDifferences().print(differences)).isEqualTo(
                 "Missing Directories:\n" +
-                        "\tmissingDir\n" +
-                        "\tmissingDir2\n" +
-                        "\n" +
-                        "Missing Files:\n" +
-                        "\tmissingDir2\\missingFile.txt\n" +
-                        "\tmissingDir\\missingFile.txt\n" +
-                        "\tmissingFile1\n" +
-                        "\tmissingFile2\n" +
-                        "\n" +
-                        "Extra Directories:\n" +
-                        "\textraDir\n" +
-                        "\textraDir2\n" +
-                        "\n" +
-                        "Extra Files:\n" +
-                        "\textraDir2\\extraFile.txt\n" +
-                        "\textraDir\\extraFile.txt\n" +
-                        "\n" +
-                        "same.txt:\n" +
-                        "\tChanged content at line 3:\n" +
-                        "\t\tfrom ->\n" +
-                        "\t\tline3\n" +
-                        "\t\tline4\n" +
-                        "\t\tto ->\n" +
-                        "\t\tline25\n" +
-                        "\n" +
-                        "\tMissing content at line 7:\n" +
-                        "\t\tmissing\n" +
-                        "\n" +
-                        "\tInserted content at line 9:\n" +
-                        "\t\tline10\n" +
-                        "\n" +
-                        "same2.txt:\n" +
-                        "\tChanged content at line 3:\n" +
-                        "\t\tfrom ->\n" +
-                        "\t\tline3\n" +
-                        "\t\tline4\n" +
-                        "\t\tto ->\n" +
-                        "\t\tline25\n" +
-                        "\n" +
-                        "\tMissing content at line 7:\n" +
-                        "\t\tmissing\n" +
-                        "\n" +
-                        "\tInserted content at line 9:\n" +
-                        "\t\tline10\n",
+                    "\tmissingDir\n" +
+                    "\tmissingDir2\n" +
+                    "\n" +
+                    "Missing Files:\n" +
+                    "\tmissingDir2\\missingFile.txt\n" +
+                    "\tmissingDir\\missingFile.txt\n" +
+                    "\tmissingFile1\n" +
+                    "\tmissingFile2\n" +
+                    "\n" +
+                    "Extra Directories:\n" +
+                    "\textraDir\n" +
+                    "\textraDir2\n" +
+                    "\n" +
+                    "Extra Files:\n" +
+                    "\textraDir2\\extraFile.txt\n" +
+                    "\textraDir\\extraFile.txt\n" +
+                    "\n" +
+                    "same.txt:\n" +
+                    "\tChanged content at line 3:\n" +
+                    "\t\tfrom ->\n" +
+                    "\t\tline3\n" +
+                    "\t\tline4\n" +
+                    "\t\tto ->\n" +
+                    "\t\tline25\n" +
+                    "\n" +
+                    "\tMissing content at line 7:\n" +
+                    "\t\tmissing\n" +
+                    "\n" +
+                    "\tInserted content at line 9:\n" +
+                    "\t\tline10\n" +
+                    "\n" +
+                    "same2.txt:\n" +
+                    "\tChanged content at line 3:\n" +
+                    "\t\tfrom ->\n" +
+                    "\t\tline3\n" +
+                    "\t\tline4\n" +
+                    "\t\tto ->\n" +
+                    "\t\tline25\n" +
+                    "\n" +
+                    "\tMissing content at line 7:\n" +
+                    "\t\tmissing\n" +
+                    "\n" +
+                    "\tInserted content at line 9:\n" +
+                    "\t\tline10\n",
             )
-        }
-        else{
+        } else {
             assertThat(PrettyPrintDifferences().print(differences)).isEqualTo(
                 "Missing Directories:\n" +
-                        "\tmissingDir\n" +
-                        "\tmissingDir2\n" +
-                        "\n" +
-                        "Missing Files:\n" +
-                        "\tmissingDir2/missingFile.txt\n" +
-                        "\tmissingDir/missingFile.txt\n" +
-                        "\tmissingFile1\n" +
-                        "\tmissingFile2\n" +
-                        "\n" +
-                        "Extra Directories:\n" +
-                        "\textraDir\n" +
-                        "\textraDir2\n" +
-                        "\n" +
-                        "Extra Files:\n" +
-                        "\textraDir2/extraFile.txt\n" +
-                        "\textraDir/extraFile.txt\n" +
-                        "\n" +
-                        "same.txt:\n" +
-                        "\tChanged content at line 3:\n" +
-                        "\t\tfrom ->\n" +
-                        "\t\tline3\n" +
-                        "\t\tline4\n" +
-                        "\t\tto ->\n" +
-                        "\t\tline25\n" +
-                        "\n" +
-                        "\tMissing content at line 7:\n" +
-                        "\t\tmissing\n" +
-                        "\n" +
-                        "\tInserted content at line 9:\n" +
-                        "\t\tline10\n" +
-                        "\n" +
-                        "same2.txt:\n" +
-                        "\tChanged content at line 3:\n" +
-                        "\t\tfrom ->\n" +
-                        "\t\tline3\n" +
-                        "\t\tline4\n" +
-                        "\t\tto ->\n" +
-                        "\t\tline25\n" +
-                        "\n" +
-                        "\tMissing content at line 7:\n" +
-                        "\t\tmissing\n" +
-                        "\n" +
-                        "\tInserted content at line 9:\n" +
-                        "\t\tline10\n",
+                    "\tmissingDir\n" +
+                    "\tmissingDir2\n" +
+                    "\n" +
+                    "Missing Files:\n" +
+                    "\tmissingDir2/missingFile.txt\n" +
+                    "\tmissingDir/missingFile.txt\n" +
+                    "\tmissingFile1\n" +
+                    "\tmissingFile2\n" +
+                    "\n" +
+                    "Extra Directories:\n" +
+                    "\textraDir\n" +
+                    "\textraDir2\n" +
+                    "\n" +
+                    "Extra Files:\n" +
+                    "\textraDir2/extraFile.txt\n" +
+                    "\textraDir/extraFile.txt\n" +
+                    "\n" +
+                    "same.txt:\n" +
+                    "\tChanged content at line 3:\n" +
+                    "\t\tfrom ->\n" +
+                    "\t\tline3\n" +
+                    "\t\tline4\n" +
+                    "\t\tto ->\n" +
+                    "\t\tline25\n" +
+                    "\n" +
+                    "\tMissing content at line 7:\n" +
+                    "\t\tmissing\n" +
+                    "\n" +
+                    "\tInserted content at line 9:\n" +
+                    "\t\tline10\n" +
+                    "\n" +
+                    "same2.txt:\n" +
+                    "\tChanged content at line 3:\n" +
+                    "\t\tfrom ->\n" +
+                    "\t\tline3\n" +
+                    "\t\tline4\n" +
+                    "\t\tto ->\n" +
+                    "\t\tline25\n" +
+                    "\n" +
+                    "\tMissing content at line 7:\n" +
+                    "\t\tmissing\n" +
+                    "\n" +
+                    "\tInserted content at line 9:\n" +
+                    "\t\tline10\n",
             )
         }
     }
