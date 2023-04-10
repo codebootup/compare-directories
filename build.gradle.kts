@@ -131,3 +131,9 @@ configure<SpotlessExtension> {
         ktlint()
     }
 }
+
+tasks.named("jacocoTestReport", JacocoReport::class.java) {
+    reports {
+        xml.required.set(true)
+    }
+}
