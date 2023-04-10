@@ -13,7 +13,9 @@ env:
 jobs:
   publish-release:
     runs-on: ubuntu-latest
-
+    permissions:
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -27,4 +29,10 @@ jobs:
           NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
           echo "New version: ${NEW_VERSION}"
           echo "Github username: ${GITHUB_ACTOR}"
-          ./gradlew -Pversion=${NEW_VERSION} publish closeAndReleaseStagingRepository --info
+          ./gradlew -Pversion=${NEW_VERSION} build publish closeAndReleaseStagingRepository --info
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            build/test-results/**/*.xml
