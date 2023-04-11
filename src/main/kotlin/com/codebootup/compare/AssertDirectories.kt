@@ -19,13 +19,32 @@ package com.codebootup.compare
 
 import java.nio.file.Path
 
+/**
+ * Entry point for assertion of directories.
+ * Example:
+ *
+ * ```kotlin
+ * AssertDirectories.assertThat("/some/directory").isEqualTo("/some/other/directory")
+ * ```
+ */
 class AssertDirectories(private val actual: Path) {
     companion object {
+        /**
+         * Static method containing actual path for comparison
+         *
+         * @param actual actual path to the directory for comparison
+         */
         fun assertThat(actual: Path): AssertDirectories {
             return AssertDirectories(actual)
         }
     }
 
+    /**
+     * Verifies that the actual value is equal to expected
+     *
+     * @param expected - expected path to the directory for comparison
+     * @throws AssertionError
+     */
     fun isEqualTo(expected: Path) {
         val differences = CompareDirectoriesTreesCommonsIoAndAssetJImpl().compare(
             original = expected,
