@@ -15,7 +15,7 @@ repositories {
 }
 
 group = "com.codebootup.compare-directories"
-version = (project.properties["version"] ?: "1.0.0-SNAPSHOT")
+version = (project.properties["buildVersion"] ?: "1.0.0-SNAPSHOT")
 
 dependencies {
     implementation("commons-io:commons-io:2.11.0")

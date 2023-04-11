@@ -51,7 +51,7 @@ jobs:
           NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
           echo "New version: ${NEW_VERSION}"
           echo "Github username: ${GITHUB_ACTOR}"
-          ./gradlew -Pversion=${NEW_VERSION} build publish closeAndReleaseStagingRepository --info
+          ./gradlew -PbuildVersion=${NEW_VERSION} build publish closeAndReleaseStagingRepository --info
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
