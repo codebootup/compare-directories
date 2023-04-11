@@ -3,7 +3,7 @@ Main use case is for test assertions where you want to compare two directories t
 structure or file content.  We have built this to facilitate our code generating testing but have split it out as 
 we feel it is a useful utility by itself.
 
-## Depenency
+## Dependency Setup
 **Gradle**
 ```
 testImplementation('com.codebootup.compare-directories:compare-directories:1.0.0')
