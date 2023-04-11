@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.8.10"
     signing
     `maven-publish`
+    jacoco
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("com.diffplug.spotless") version "6.18.0"
 }
@@ -128,5 +129,11 @@ configure<SpotlessExtension> {
     }
     kotlinGradle {
         ktlint()
+    }
+}
+
+tasks.named("jacocoTestReport", JacocoReport::class.java) {
+    reports {
+        xml.required.set(true)
     }
 }
