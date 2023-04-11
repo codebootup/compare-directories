@@ -26,6 +26,10 @@ import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.streams.toList
 
+/**
+ * Implementation for [CompareDirectories]
+ * This class uses assertj's [Diff] for comparison of two files or paths.
+ */
 class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
 
     override fun compare(original: Path, revised: Path): List<Difference> {
