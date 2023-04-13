@@ -19,7 +19,7 @@ package com.codebootup.compare
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.io.path.Path
 

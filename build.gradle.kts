@@ -1,7 +1,7 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 
 plugins {
-    id("com.codebootup.kotlin") version "1.0.0"
+    id("com.codebootup.kotlin") version "1.0.1"
     id("org.jetbrains.dokka") version "1.8.10"
     signing
     `maven-publish`
