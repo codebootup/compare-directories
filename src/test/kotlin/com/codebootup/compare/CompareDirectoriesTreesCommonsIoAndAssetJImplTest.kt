@@ -40,6 +40,14 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImplTest {
     }
 
     @Test
+    fun `can detect extra file and directory with relative path`() {
+        val differences = compare(File(".${File.separator}src${File.separator}test${File.separator}resources${File.separator}extraDirectoryFileTest"))
+        assertThat(differences).containsExactlyElementsOf(
+            listOf(ExtraFile("extraDir${File.separator}extraFile.txt"), ExtraDirectory("extraDir")),
+        )
+    }
+
+    @Test
     fun `can detect missing file and directory`() {
         val testResources = CompareDirectoriesTreesCommonsIoAndAssetJImplTest::class.java.classLoader.getResource("missingDirectoryFileTest")
         val differences = compare(File(testResources.path))

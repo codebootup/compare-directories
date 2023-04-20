@@ -33,21 +33,25 @@ import kotlin.streams.toList
 class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
 
     override fun compare(original: Path, revised: Path): List<Difference> {
-        return getDirectoryAndFileTreeDifferences(original = original, revised = revised) +
-            getContentDifferences(original = original, revised = revised)
+
+        val originalFile = File(original.absolutePathString())
+        val revisedFile = File(revised.absolutePathString())
+
+        return getDirectoryAndFileTreeDifferences(original = originalFile, revised = revisedFile) +
+            getContentDifferences(original = originalFile, revised = revisedFile)
     }
 
-    private fun getContentDifferences(original: Path, revised: Path): List<Difference> {
+    private fun getContentDifferences(original: File, revised: File): List<Difference> {
         val originalFiles = files(original)
         val revisedFiles = files(revised)
 
         val oFiles = originalFiles
             .filter { it.isFile }
-            .associateBy { it.absolutePath.substring(original.absolutePathString().length + 1) }
+            .associateBy { it.canonicalPath.substring(original.canonicalPath.length + 1) }
 
         val rFiles = revisedFiles
             .filter { it.isFile }
-            .associateBy { it.absolutePath.substring(revised.absolutePathString().length + 1) }
+            .associateBy { it.canonicalPath.substring(revised.canonicalPath.length + 1) }
 
         val filesToCompare = oFiles
             .keys
@@ -82,51 +86,49 @@ class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
             .filter { it.deltas.isNotEmpty() }
     }
 
-    private fun getDirectoryAndFileTreeDifferences(original: Path, revised: Path): List<Difference> {
+    private fun getDirectoryAndFileTreeDifferences(original: File, revised: File): List<Difference> {
         val originalFiles = sortedRelativeFiles(original)
         val revisedFiles = sortedRelativeFiles(revised)
 
         val missing = originalFiles
             .filter { !revisedFiles.contains(it) }
-            .map { File("${original.absolutePathString()}${File.separator}$it") }
+            .map { File("${original.canonicalPath}${File.separator}$it") }
             .toList()
 
         val new = revisedFiles
             .filter { !originalFiles.contains(it) }
-            .map { File("${revised.absolutePathString()}${File.separator}$it") }
+            .map { File("${revised.canonicalPath}${File.separator}$it") }
             .toList()
 
         val missingFiles = missing.filter { it.isFile }
-            .map { MissingFile(it.absolutePath.substring(original.absolutePathString().length + 1)) }
+            .map { MissingFile(it.canonicalPath.substring(original.canonicalPath.length + 1)) }
 
         val missingDirectories = missing.filter { it.isDirectory }
-            .map { MissingDirectory(it.absolutePath.substring(original.absolutePathString().length + 1)) }
+            .map { MissingDirectory(it.canonicalPath.substring(original.canonicalPath.length + 1)) }
 
         val extraFiles = new.filter { it.isFile }
-            .map { ExtraFile(it.absolutePath.substring(revised.absolutePathString().length + 1)) }
+            .map { ExtraFile(it.canonicalPath.substring(revised.canonicalPath.length + 1)) }
 
         val extraDirectories = new.filter { it.isDirectory }
-            .map { ExtraDirectory(it.absolutePath.substring(revised.absolutePathString().length + 1)) }
+            .map { ExtraDirectory(it.canonicalPath.substring(revised.canonicalPath.length + 1)) }
 
         return missingFiles + missingDirectories + extraFiles + extraDirectories
     }
 
-    private fun sortedRelativeFiles(dirPath: Path): List<String> {
-        val dir = File(dirPath.absolutePathString())
+    private fun sortedRelativeFiles(dir: File): List<String> {
         return FileUtils.listFilesAndDirs(
             dir,
             TrueFileFilter.TRUE,
             TrueFileFilter.TRUE,
         )
-            .map { it.absolutePath.substring(dirPath.absolutePathString().length) }
+            .map { it.canonicalPath.substring(dir.canonicalPath.length) }
             .filter { it.isNotBlank() }
             .stream()
             .sorted()
             .toList()
     }
 
-    private fun files(dirPath: Path): List<File> {
-        val dir = File(dirPath.absolutePathString())
+    private fun files(dir: File): List<File> {
         return FileUtils.listFilesAndDirs(
             dir,
             TrueFileFilter.TRUE,
