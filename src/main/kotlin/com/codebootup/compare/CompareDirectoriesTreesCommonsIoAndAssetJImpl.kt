@@ -33,7 +33,6 @@ import kotlin.streams.toList
 class CompareDirectoriesTreesCommonsIoAndAssetJImpl : CompareDirectories {
 
     override fun compare(original: Path, revised: Path): List<Difference> {
-
         val originalFile = File(original.absolutePathString())
         val revisedFile = File(revised.absolutePathString())
 
