@@ -6,14 +6,14 @@ we feel it is a useful utility by itself.
 ## Dependency Setup
 **Gradle**
 ```
-testImplementation('com.codebootup.compare-directories:compare-directories:1.0.0')
+testImplementation('com.codebootup:compare-directories:1.0.1')
 ```
 **Maven**
 ```
 <dependency>
-    <groupId>com.codebootup.compare-directories</groupId>
+    <groupId>com.codebootup</groupId>
     <artifactId>compare-directories</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <scope>test</scope>
 </dependency>
 ```
